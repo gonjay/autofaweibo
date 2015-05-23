@@ -4,6 +4,13 @@ require 'sqlite3'
 require 'rest-client'
 require 'logger'
 
+config_path = File.expand_path("../config.yml", __FILE__)
+debug_path = File.expand_path("../debug.log", __FILE__)
+
+ActiveRecord::Base.logger = Logger.new(debug_path)
+$configuration = YAML::load(IO.read(config_path))
+ActiveRecord::Base.establish_connection($configuration['development'])
+
 class BoringImage < ActiveRecord::Base
   validates_uniqueness_of :img_src
   after_create :sendWeibo
@@ -38,7 +45,7 @@ class BoringImage < ActiveRecord::Base
         appkey: "",
         style_type: "1",
         pic_id: pic_ids,
-        text: acv_comment + "#{Time.now.to_i}",
+        text: acv_comment + "#{id}",
         pdetail: "",
         rank: "0",
         rankid: "",
@@ -48,11 +55,12 @@ class BoringImage < ActiveRecord::Base
         ajwvr: "6",
         __rnd: "#{(Time.now.to_f.round(3) * 1000).to_i}",
       }
-    RestClient.post(
+    re = RestClient.post(
       "http://weibo.com/aj/mblog/add",
       content,
       $header
       )
+    logger.info(re)
   end
 
   def self.fetch
