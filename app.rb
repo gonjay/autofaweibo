@@ -3,13 +3,17 @@ require 'active_record'
 require 'sqlite3'
 require 'rest-client'
 require 'logger'
+require 'open-uri'
+require 'nokogiri'
+require 'mini_magick'
 
 config_path = File.expand_path("../config.yml", __FILE__)
 debug_path = File.expand_path("../debug.log", __FILE__)
 
 ActiveRecord::Base.logger = Logger.new(debug_path)
-$configuration = YAML::load(IO.read(config_path))
-ActiveRecord::Base.establish_connection($configuration['development'])
+configuration = YAML::load(IO.read(config_path))
+$header = configuration['weibo']
+ActiveRecord::Base.establish_connection(configuration['development'])
 
 class BoringImage < ActiveRecord::Base
   validates_uniqueness_of :img_src

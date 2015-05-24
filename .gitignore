@@ -1,3 +1,4 @@
 .rufus-scheduler.lock
 config.yml
 debug.log
+db/data.sqlite3
