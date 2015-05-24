@@ -102,7 +102,7 @@ class BoringImage < ActiveRecord::Base
 
       end
 
-      BoringImage.create(
+      p BoringImage.create(
         img_src: img_src,
         acv_comment: ac.content.strip,
         pic_ids: pic_ids,
@@ -110,8 +110,6 @@ class BoringImage < ActiveRecord::Base
         height: height,
         size: size
         )
-
-      p "new image!"
     end
 
   end
