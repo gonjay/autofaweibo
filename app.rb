@@ -69,7 +69,7 @@ class BoringImage < ActiveRecord::Base
 
   def self.fetch
 
-    html = open("http://jandan.net").read
+    html = RestClient.get("http://jandan.net",$header)
     doc = Nokogiri::HTML(html)
 
     doc.css('.hotcomment')[0].css('.acv_comment').each do |ac|
