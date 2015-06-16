@@ -44,27 +44,40 @@ class BoringImage < ActiveRecord::Base
 
   def sendWeibo
     sleep 5
-    content = {
-        location: "v6_content_home",
-        appkey: "",
-        style_type: "1",
-        pic_id: pic_ids,
-        text: acv_comment + "#{id}",
-        pdetail: "",
-        rank: "0",
-        rankid: "",
-        module: "stissue",
-        pub_type: "dialog",
-        _t: "",
-        ajwvr: "6",
-        __rnd: "#{(Time.now.to_f.round(3) * 1000).to_i}",
-      }
-    re = RestClient.post(
+    content = getcontent
+    re = nil
+    begin
+      re = RestClient.post(
       "http://weibo.com/aj/mblog/add",
       content,
       $header
       )
+      self.update_attributes!(sended: true)
+    rescue Exception => e
+      sendEmail(e)
+    end
     logger.info(re)
+  end
+
+  def sendEmail(e)
+  end
+
+  def getcontent
+    {
+      location: "v6_content_home",
+      appkey: "",
+      style_type: "1",
+      pic_id: pic_ids,
+      text: acv_comment + "#{id}",
+      pdetail: "",
+      rank: "0",
+      rankid: "",
+      module: "stissue",
+        pub_type: "dialog",
+        _t: "",
+        ajwvr: "6",
+        __rnd: "#{(Time.now.to_f.round(3) * 1000).to_i}",
+    }
   end
 
   def self.fetch

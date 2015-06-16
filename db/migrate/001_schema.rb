@@ -9,6 +9,7 @@ class Schema < ActiveRecord::Migration
       t.integer  :width
       t.integer  :height
       t.integer  :size
+      t.boolean  :sended, :default => false
     end
   end
 end
