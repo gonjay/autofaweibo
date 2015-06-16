@@ -9,10 +9,13 @@ require 'mini_magick'
 
 config_path = File.expand_path("../config.yml", __FILE__)
 debug_path = File.expand_path("../debug.log", __FILE__)
+sinacookies_path = File.expand_path("../sina.cookies", __FILE__)
+sinacookies = File.open(sinacookies_path).read
 
 ActiveRecord::Base.logger = Logger.new(debug_path)
 configuration = YAML::load(IO.read(config_path))
 $header = configuration['weibo']
+$header["Cookie"] = sinacookies
 ActiveRecord::Base.establish_connection(configuration['development'])
 
 class BoringImage < ActiveRecord::Base
