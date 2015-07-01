@@ -88,7 +88,7 @@ class BoringImage < ActiveRecord::Base
     html = RestClient.get("http://jandan.net",$header)
     doc = Nokogiri::HTML(html)
 
-    doc.css('.hotcomment')[0].css('.acv_comment').each do |ac|
+    doc.at_css('#list-pic').css('.acv_comment').each do |ac|
       width = 0
       height = 0
       size = 0
