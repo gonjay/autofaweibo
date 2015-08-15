@@ -55,7 +55,9 @@ class BoringImage < ActiveRecord::Base
       content,
       $header
       )
-      self.update_attributes!(sended: true)
+      if re.include?('"code":"100000"')
+        self.update_attributes!(sended: true)
+      end
     rescue Exception => e
       sendEmail(e)
     end
